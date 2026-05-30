@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin · DK SL8 SAI Mampang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --sage:    #a8c5a0;
+    --sage-lt: #d4e8d0;
+    --sage-bg: #f0f7ee;
+    --sage-dk: #6a9e63;
+    --stone:   #8c8c86;
+    --stone-lt:#e8e8e4;
+    --stone-bg:#f7f7f5;
+    --ink:     #2d2d2a;
+    --ink-lt:  #5a5a55;
+    --white:   #fefefe;
+    --amber:   #f59e0b;
+    --red:     #ef4444;
+    --radius:  14px;
+    --shadow:  0 2px 16px rgba(100,130,90,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sage-bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--stone-lt);
+    padding: 28px 24px 20px;
+    text-align: center;
+  }
+  .chip {
+    display: inline-block;
+    background: #fff3cd;
+    color: #92701a;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+  }
+  .header p { color: var(--stone); font-size: 13px; margin-top: 6px; }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 24px 16px; }
+
+  /* ── Login ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--stone-lt);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 14px;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 7px;
+  }
+  input[type=password], input[type=text] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--stone-lt);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    transition: border-color 0.2s;
+  }
+  input:focus { outline: none; border-color: var(--sage); }
+
+  .btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn-sage   { background: var(--sage-dk); color: var(--white); }
+  .btn-amber  { background: var(--amber); color: var(--white); }
+  .btn-green  { background: #16a34a; color: var(--white); }
+  .btn-ghost  { background: transparent; border: 1px solid var(--stone-lt); color: var(--stone); }
+
+  .err { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 10px; }
+
+  /* ── Stat row ── */
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--stone-lt);
+    font-size: 14px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-val { font-weight: 600; color: var(--ink); }
+
+  /* ── Tally bar ── */
+  .tally-item { margin-bottom: 14px; }
+  .tally-header { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+  .tally-name { font-weight: 600; }
+  .tally-count { color: var(--stone); }
+  .bar-track { height: 10px; background: var(--stone-lt); border-radius: 99px; overflow: hidden; }
+  .bar-fill-tally { height: 100%; background: linear-gradient(90deg, var(--sage), var(--sage-dk)); border-radius: 99px; transition: width 0.8s; }
+  .bar-fill-lead  { background: linear-gradient(90deg, var(--amber), #d97706); }
+  .bar-fill-won   { background: linear-gradient(90deg, #16a34a, #15803d); }
+
+  /* ── Log table ── */
+  .log-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .log-table th {
+    text-align: left; padding: 6px 8px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--stone);
+    border-bottom: 1px solid var(--stone-lt);
+  }
+  .log-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--stone-bg);
+    vertical-align: top;
+  }
+  .log-table tr:last-child td { border-bottom: none; }
+  .cand-badge {
+    display: inline-block;
+    background: var(--sage-lt); color: var(--sage-dk);
+    border-radius: 99px; padding: 2px 10px; font-size: 12px; font-weight: 600;
+  }
+
+  /* ── Winner banner ── */
+  .winner-banner {
+    background: linear-gradient(135deg, #e8f5e0, #d4e8d0);
+    border: 1px solid var(--sage);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .winner-banner p { font-size: 12px; color: var(--sage-dk); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .winner-name { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); margin-top: 6px; }
+
+  .loading { text-align: center; padding: 60px 0; color: var(--stone); font-size: 14px; }
+  .dot { animation: blink 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+
+  .refresh-bar { text-align:center; font-size:12px; color:var(--stone); margin-bottom:16px; }
+  .refresh-bar button {
+    background: none; border: 1px solid var(--stone-lt); border-radius: 99px;
+    padding: 5px 16px; font-size: 12px; color: var(--sage-dk); cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .footer-nav { text-align:center; margin-top:20px; font-size:13px; color:var(--stone); }
+  .footer-nav a { color:var(--sage-dk); text-decoration:none; font-weight:500; }
+  .section-gap { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="chip">⚙️ Admin</div>
+  <h1>Panel Admin</h1>
+  <p>SL8 SAI Mampang · Akses terbatas</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Login -->
+  <div id="login-area" class="card">
+    <p class="card-title">Masuk sebagai Admin</p>
+    <label>Password</label>
+    <input type="password" id="pass-input" placeholder="Masukkan password admin..."
+      onkeydown="if(event.key==='Enter') doLogin()"/>
+    <div id="login-err" class="err" style="display:none"></div>
+    <button class="btn btn-sage" onclick="doLogin()">Masuk</button>
+  </div>
+
+  <!-- Dashboard (hidden until login) -->
+  <div id="dashboard" style="display:none">
+
+    <div id="loading" class="loading">
+      Memuat<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+
+    <div id="dash-content" style="display:none">
+
+      <div id="winner-area" style="display:none">
+        <div class="winner-banner">
+          <p>🏆 DK Terpilih</p>
+          <div class="winner-name" id="winner-name"></div>
+        </div>
+      </div>
+
+      <div class="refresh-bar">
+        <button onclick="loadDash()">↻ Refresh</button>
+      </div>
+
+      <!-- Status -->
+      <div class="card section-gap">
+        <p class="card-title">Status Voting</p>
+        <div class="stat-row"><span>Fase</span><span class="stat-val" id="d-phase">—</span></div>
+        <div class="stat-row"><span>Suara masuk</span><span class="stat-val" id="d-voted">—</span></div>
+        <div class="stat-row"><span>Partisipasi</span><span class="stat-val" id="d-pct">—</span></div>
+        <div class="stat-row"><span>Threshold menang</span><span class="stat-val" id="d-thresh">—</span></div>
+      </div>
+
+      <!-- Tally -->
+      <div class="card section-gap">
+        <p class="card-title">Perolehan Suara</p>
+        <div id="tally-area"></div>
+        <p style="font-size:11px;color:var(--stone);margin-top:8px">
+          * Persentase dihitung dari total 32 keluarga OTS
+        </p>
+      </div>
+
+      <!-- Controls -->
+      <div class="card section-gap" id="controls-area">
+        <p class="card-title">Kontrol Putaran</p>
+        <div id="ctrl-content"></div>
+      </div>
+
+      <!-- Log -->
+      <div class="card section-gap">
+        <p class="card-title">Log Voting Lengkap (<span id="log-count">0</span>)</p>
+        <div style="overflow-x:auto">
+          <table class="log-table">
+            <thead><tr><th>#</th><th>Waktu</th><th>OTS</th><th>Memilih</th></tr></thead>
+            <tbody id="log-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <button class="btn btn-ghost" onclick="logout()" style="width:auto;padding:8px 20px;margin-top:4px">Keluar</button>
+
+    </div>
+  </div>
+
+  <div class="footer-nav">
+    <a href="monitor.html">Lihat monitoring publik →</a>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL  = "https://script.google.com/macros/s/AKfycbwejX41sQxaTtmcl0NTZ6ZwqngtDBjlQ8SimmMGLPngW-IC6CBj4R8lgNaWJfx8bTZE/exec";
+const ADMIN_PASS  = "sl8sai2025admin";
+let   adminPass   = "";
+let   lastData    = null;
+
+function doLogin() {
+  const p = document.getElementById("pass-input").value;
+  if (!p) return;
+  adminPass = p;
+  document.getElementById("login-area").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  loadDash();
+}
+
+function logout() {
+  adminPass = "";
+  document.getElementById("login-area").style.display = "block";
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("pass-input").value = "";
+  document.getElementById("dash-content").style.display = "none";
+  document.getElementById("loading").style.display = "block";
+}
+
+async function loadDash() {
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("dash-content").style.display = "none";
+
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=getAdmin&pass=${encodeURIComponent(adminPass)}&t=${Date.now()}`);
+    const data = await res.json();
+
+    if (!data.ok) {
+      alert(data.msg || "Akses ditolak.");
+      logout();
+      return;
+    }
+
+    lastData = data;
+    renderDash(data);
+  } catch(e) {
+    alert("Gagal memuat data. Coba lagi.");
+  }
+}
+
+function renderDash(d) {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("dash-content").style.display = "block";
+
+  // Winner
+  if (d.winner) {
+    document.getElementById("winner-area").style.display = "block";
+    document.getElementById("winner-name").textContent = d.winner;
+  }
+
+  // Status
+  document.getElementById("d-phase").textContent  = d.phase === "r2" ? "Putaran 2" : d.phase === "done" ? "Selesai" : "Putaran 1";
+  document.getElementById("d-voted").textContent  = `${d.votedCount} / ${d.totalOTS}`;
+  document.getElementById("d-pct").textContent    = `${d.pct}%`;
+  document.getElementById("d-thresh").textContent = `${d.threshold} suara`;
+
+  // Tally
+  const ta = document.getElementById("tally-area");
+  ta.innerHTML = "";
+  if (!d.tally || !d.tally.length) {
+    ta.innerHTML = '<p style="color:var(--stone);font-size:13px">Belum ada suara.</p>';
+  } else {
+    d.tally.forEach((c, i) => {
+      const pct  = d.totalOTS > 0 ? Math.round(c.count / d.totalOTS * 100) : 0;
+      const won  = c.count >= d.threshold;
+      const lead = i === 0;
+      const cls  = won ? "bar-fill-won" : lead ? "bar-fill-lead" : "";
+      ta.innerHTML += `
+        <div class="tally-item">
+          <div class="tally-header">
+            <span class="tally-name">${i===0?"🥇":i===1?"🥈":i===2?"🥉":"  "} ${c.name}</span>
+            <span class="tally-count">${c.count} suara · ${pct}%${won?' ✅':''}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill-tally ${cls}" style="width:${pct}%"></div>
+          </div>
+        </div>`;
+    });
+  }
+
+  // Controls
+  const cc = document.getElementById("ctrl-content");
+  cc.innerHTML = "";
+
+  if (d.phase === "done") {
+    cc.innerHTML = '<p style="color:var(--stone);font-size:13px">Pemilihan telah selesai.</p>';
+  } else if (d.phase === "r1") {
+    // Cek ada yang 50%+
+    const winner = d.tally.find(c => c.count >= d.threshold);
+    if (winner) {
+      cc.innerHTML = `
+        <p style="font-size:13px;margin-bottom:12px;color:var(--ink-lt)">
+          <strong>${winner.name}</strong> telah mencapai ${d.threshold} suara (50%+). Siap ditetapkan.
+        </p>
+        <button class="btn btn-green" onclick="declareWinner('${winner.name}')">
+          🏆 Tetapkan ${winner.name} sebagai DK
+        </button>`;
+    } else {
+      const top3 = d.tally.slice(0, 3).map(c => c.name);
+      cc.innerHTML = `
+        <p style="font-size:13px;margin-bottom:12px;color:var(--ink-lt)">
+          Belum ada kandidat mencapai 50%. Jika voting dianggap selesai, lanjutkan ke Putaran 2 dengan top 3:
+          <strong>${top3.join(", ")}</strong>
+        </p>
+        <button class="btn btn-amber" onclick="goR2()" ${d.votedCount === 0 ? 'disabled' : ''}>
+          🔄 Lanjut ke Putaran 2
+        </button>`;
+    }
+  } else if (d.phase === "r2") {
+    const winner = d.tally.find(c => c.count >= d.threshold);
+    const lead   = d.tally[0];
+    if (winner) {
+      cc.innerHTML = `
+        <p style="font-size:13px;margin-bottom:12px;color:var(--ink-lt)">
+          <strong>${winner.name}</strong> telah mencapai ${d.threshold} suara.
+        </p>
+        <button class="btn btn-green" onclick="declareWinner('${winner.name}')">
+          🏆 Tetapkan ${winner.name} sebagai DK
+        </button>`;
+    } else if (lead) {
+      cc.innerHTML = `
+        <p style="font-size:13px;margin-bottom:12px;color:var(--ink-lt)">
+          Putaran 2 aktif. Jika semua OTS sudah vote dan tidak ada yang capai 50%, tetapkan suara terbanyak.
+        </p>
+        <button class="btn btn-green" onclick="declareWinner('${lead.name}')" ${d.votedCount === 0 ? 'disabled':''}>
+          🏆 Tetapkan ${lead.name} sebagai DK (suara terbanyak)
+        </button>`;
+    }
+  }
+
+  // Log
+  document.getElementById("log-count").textContent = d.voteLog?.length || 0;
+  const tb = document.getElementById("log-body");
+  tb.innerHTML = "";
+  (d.voteLog || []).forEach((row, i) => {
+    tb.innerHTML += `<tr>
+      <td style="color:var(--stone)">${i+1}</td>
+      <td style="color:var(--stone);font-size:12px">${row.time}</td>
+      <td>${row.voter}</td>
+      <td><span class="cand-badge">${row.candidate}</span></td>
+    </tr>`;
+  });
+  if (!d.voteLog?.length) {
+    tb.innerHTML = '<tr><td colspan="4" style="color:var(--stone);text-align:center;padding:16px">Belum ada suara.</td></tr>';
+  }
+}
+
+async function goR2() {
+  if (!confirm("Lanjutkan ke Putaran 2? Voting putaran 1 akan ditutup.")) return;
+  const top3 = lastData.tally.slice(0, 3).map(c => c.name).join(",");
+  const res = await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({ action:"setPhase", pass:adminPass, phase:"r2", r2Candidates:top3, winner:"" })
+  });
+  const d = await res.json();
+  if (d.ok) { alert("Putaran 2 dimulai!"); loadDash(); }
+  else alert(d.msg);
+}
+
+async function declareWinner(name) {
+  if (!confirm(`Tetapkan ${name} sebagai DK SL8 SAI Mampang?`)) return;
+  const res = await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({ action:"setWinner", pass:adminPass, winner:name })
+  });
+  const d = await res.json();
+  if (d.ok) { alert(`${name} ditetapkan sebagai DK! 🎉`); loadDash(); }
+  else alert(d.msg);
+}
+</script>
+</body>
+</html>
