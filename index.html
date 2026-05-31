@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Voting DK · SL8 SAI Mampang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --sage:    #a8c5a0;
+    --sage-lt: #d4e8d0;
+    --sage-bg: #f0f7ee;
+    --sage-dk: #6a9e63;
+    --stone:   #8c8c86;
+    --stone-lt:#e8e8e4;
+    --stone-bg:#f7f7f5;
+    --ink:     #2d2d2a;
+    --ink-lt:  #5a5a55;
+    --white:   #fefefe;
+    --radius:  14px;
+    --shadow:  0 2px 16px rgba(100,130,90,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sage-bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--stone-lt);
+    padding: 28px 24px 20px;
+    text-align: center;
+  }
+  .chip {
+    display: inline-block;
+    background: var(--sage-lt);
+    color: var(--sage-dk);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .header p {
+    color: var(--stone);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  /* ── Phase banner ── */
+  .phase-banner {
+    background: var(--sage-lt);
+    border-bottom: 1px solid #c2dbbe;
+    padding: 10px 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--sage-dk);
+    font-weight: 500;
+  }
+
+  /* ── Card ── */
+  .wrap { max-width: 480px; margin: 0 auto; padding: 24px 16px; }
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--stone-lt);
+    padding: 28px 24px;
+  }
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+
+  /* ── Form ── */
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 7px;
+  }
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--stone-lt);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238c8c86' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  select:focus { outline: none; border-color: var(--sage); }
+  .field { margin-bottom: 18px; }
+
+  /* ── Rule notice ── */
+  .notice {
+    background: var(--stone-bg);
+    border-left: 3px solid var(--sage);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: var(--ink-lt);
+    margin-bottom: 22px;
+    line-height: 1.7;
+  }
+
+  /* ── Button ── */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--sage-dk);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.3px;
+  }
+  .btn:hover { background: #5a8e55; }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { background: var(--stone-lt); color: var(--stone); cursor: not-allowed; }
+
+  /* ── State screens ── */
+  .center-state {
+    text-align: center;
+    padding: 32px 0 16px;
+  }
+  .icon-big { font-size: 52px; margin-bottom: 14px; }
+  .center-state h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .center-state p { color: var(--stone); font-size: 14px; line-height: 1.6; }
+
+  /* ── Error ── */
+  .err {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+
+  /* ── Footer nav ── */
+  .footer-nav {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--stone);
+  }
+  .footer-nav a {
+    color: var(--sage-dk);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── Loading ── */
+  .loading {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--stone);
+    font-size: 14px;
+  }
+  .dot { animation: blink 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="chip">Pemilihan DK</div>
+  <h1>Kelas SL8 SAI Mampang</h1>
+  <p>Satu keluarga · Satu suara</p>
+</div>
+
+<div id="phase-banner" class="phase-banner" style="display:none"></div>
+
+<div class="wrap">
+  <div id="loading" class="loading">
+    Memuat<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+  </div>
+
+  <!-- Form -->
+  <div id="form-area" class="card" style="display:none">
+    <p class="card-title">Form Voting</p>
+
+    <div class="notice">
+      Pilih nama anak Anda sebagai identitas keluarga, lalu pilih kandidat DK.<br>
+      Satu keluarga hanya dapat melakukan voting <strong>satu kali</strong>.
+    </div>
+
+    <div class="field">
+      <label>OTS — Nama Anak</label>
+      <select id="sel-voter">
+        <option value="">— Pilih nama anak Anda —</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Pilih Kandidat DK</label>
+      <select id="sel-candidate">
+        <option value="">— Pilih kandidat —</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Alasan Memilih *</label>
+      <textarea id="txt-reason" placeholder="Tuliskan alasan Anda memilih kandidat tersebut..."
+        style="width:100%;padding:12px 14px;border:1.5px solid var(--stone-lt);border-radius:10px;
+        font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--white);
+        resize:vertical;min-height:90px;transition:border-color 0.2s;box-sizing:border-box"
+        onfocus="this.style.borderColor='var(--sage)'" onblur="this.style.borderColor='var(--stone-lt)'"></textarea>
+    </div>
+
+    <div id="err" class="err" style="display:none"></div>
+
+    <button class="btn" id="btn-submit" onclick="submitVote()">Kirim Suara</button>
+  </div>
+
+  <!-- Success -->
+  <div id="success-area" class="card" style="display:none">
+    <div class="center-state">
+      <div class="icon-big">✅</div>
+      <h2>Suara Tercatat!</h2>
+      <p>Terima kasih, suara keluarga <strong id="confirmed-name"></strong><br>telah berhasil kami terima.</p>
+    </div>
+  </div>
+
+  <!-- Done -->
+  <div id="done-area" class="card" style="display:none">
+    <div class="center-state">
+      <div class="icon-big">🎉</div>
+      <h2>Pemilihan Selesai</h2>
+      <p>DK SL8 SAI Mampang telah terpilih.<br>
+      Terima kasih atas partisipasi seluruh OTS.</p>
+      <p style="margin-top:16px;font-weight:600;color:var(--sage-dk);font-size:16px" id="winner-name"></p>
+    </div>
+  </div>
+
+  <div class="footer-nav">
+    <a href="monitor.html">Lihat monitoring partisipasi →</a>
+  </div>
+</div>
+
+<script>
+// ── GANTI URL INI dengan Web App URL dari Apps Script Deploy ──
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNF8EKJluxzfkw5DEI7YwbN6iyXp_EzyJ0U5QvuOfhOCdWBve751wJ0oxsPwrGUQWL/exec";
+
+// Dropdown voter — OTS Nama (tanpa kurung, title case)
+const VOTER_LIST = [
+  "OTS A'laa","OTS Aabidah","OTS Abdul","OTS Adhifa","OTS Aisha",
+  "OTS Alesha","OTS Amira","OTS Aqilla","OTS Aqsha","OTS Bitha",
+  "OTS Cyril","OTS Dihya","OTS Diraya","OTS Fairuz","OTS Farid",
+  "OTS Fathan","OTS Fira","OTS Haneen","OTS Ilham","OTS Keenan",
+  "OTS Raisa","OTS Rania","OTS Rayyan","OTS Rifdah","OTS Runni",
+  "OTS Sabil","OTS Senja","OTS Taqi","OTS Taseefa","OTS Yahya",
+  "OTS Zaki","OTS Zaydan"
+];
+
+// Dropdown kandidat — format lengkap dengan nama ortu dan keterangan
+const CANDIDATE_LIST = [
+  "OTS (A'LAA)-Pak Donny",
+  "OTS (AABIDAH)-Pak Ishaq",
+  "OTS (ABDUL)-Pak Marso",
+  "OTS (ADHIFA)-Pak Dede",
+  "OTS (AISHA)-Pak Yuli",
+  "OTS (AQILLA)-Pak Rangga",
+  "OTS (AQSHA)-Pak Yuli",
+  "OTS (BITHA)-Pak Diky",
+  "OTS (CYRIL)-Pak Lukman",
+  "OTS (DIRAYA)-Pak Danang",
+  "OTS (FIRA)-Pak Riswanto",
+  "OTS (ILHAM)-Pak Tri",
+  "OTS (RAISA)-Pak Eka",
+  "OTS (RAYYAN)-Pak Denny",
+  "OTS (RUNNI)-Pak Fajrin",
+  "OTS (SABIL)-Pak Supri",
+  "OTS (SENJA)-Pak Hast",
+  "OTS (TAQI)-Pak Arianto",
+  "OTS (TASEEFA)-Pak Rafur",
+  "OTS (YAHYA)-Pak Ario",
+  "OTS (ZAKI)-Pak Mallom",
+  "OTS (ZAYDAN)-Pak Rifani"
+];
+
+let currentPhase = "r1";
+let r2Candidates = [];
+
+async function init() {
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getConfig`);
+    const cfg = await res.json();
+    currentPhase = cfg.phase;
+    r2Candidates = (cfg.r2Candidates || "").split(",").map(s => s.trim()).filter(Boolean);
+
+    document.getElementById("loading").style.display = "none";
+
+    if (cfg.phase === "done") {
+      document.getElementById("done-area").style.display = "block";
+      document.getElementById("winner-name").textContent = cfg.winner ? `🏆 ${cfg.winner}` : "";
+      return;
+    }
+
+    // Phase banner
+    const banner = document.getElementById("phase-banner");
+    banner.style.display = "block";
+    banner.textContent = cfg.phase === "r2"
+      ? "⚡ Putaran 2 — Pilih dari 3 kandidat terbanyak"
+      : "Putaran 1";
+
+    // Populate dropdowns
+    const voters = document.getElementById("sel-voter");
+    VOTER_LIST.forEach(n => {
+      const o = document.createElement("option");
+      o.value = o.textContent = n;
+      voters.appendChild(o);
+    });
+
+    const candidates = document.getElementById("sel-candidate");
+    const candList = cfg.phase === "r2" ? r2Candidates : CANDIDATE_LIST;
+    candList.forEach(n => {
+      const o = document.createElement("option");
+      o.value = o.textContent = n;
+      candidates.appendChild(o);
+    });
+
+    document.getElementById("form-area").style.display = "block";
+  } catch(e) {
+    document.getElementById("loading").innerHTML =
+      "<p style='color:#b91c1c'>Gagal memuat. Coba refresh halaman.</p>";
+  }
+}
+
+async function submitVote() {
+  const voter     = document.getElementById("sel-voter").value;
+  const candidate = document.getElementById("sel-candidate").value;
+  const reason    = document.getElementById("txt-reason").value.trim();
+  const errEl     = document.getElementById("err");
+  const btn       = document.getElementById("btn-submit");
+
+  errEl.style.display = "none";
+  if (!voter)     { showErr("Pilih nama OTS Anda terlebih dahulu."); return; }
+  if (!candidate) { showErr("Pilih kandidat DK terlebih dahulu."); return; }
+  if (!reason)    { showErr("Mohon isi alasan memilih."); return; }
+  // Ekstrak nama anak dari voter ("OTS Keenan" -> "KEENAN") dan kandidat ("OTS (KEENAN)-..." -> "KEENAN")
+  const voterKey = voter.replace("OTS ", "").toUpperCase().trim();
+  const candKey  = candidate.match(/OTS \((.+?)\)/)?.[1]?.toUpperCase() || "";
+  if (voterKey === candKey) { showErr("Anda tidak dapat memilih diri sendiri."); return; }
+
+  btn.disabled = true;
+  btn.textContent = "Mengirim...";
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "vote",
+        voter: voter,
+        candidate: candidate,
+        reason: reason,
+      })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      document.getElementById("form-area").style.display = "none";
+      document.getElementById("confirmed-name").textContent = voter;
+      document.getElementById("success-area").style.display = "block";
+    } else {
+      showErr(data.msg || "Terjadi kesalahan.");
+      btn.disabled = false;
+      btn.textContent = "Kirim Suara";
+    }
+  } catch(e) {
+    showErr("Gagal terhubung. Coba lagi.");
+    btn.disabled = false;
+    btn.textContent = "Kirim Suara";
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById("err");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+
+init();
+</script>
+</body>
+</html>
